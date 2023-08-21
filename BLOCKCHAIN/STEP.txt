@@ -1,0 +1,16 @@
+Setup needed:
+
+set up truffle
+npm install -g truffle
+
+setup ganache 
+connect truffle.js 
+setup port 
+setup compiler to version 0.8.13
+
+
+
+Connect to the Metamask
+https://github.com/MetaMask/legacy-web3
+npm install @metamask/legacy-web3
+

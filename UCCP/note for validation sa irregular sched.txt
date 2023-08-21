@@ -1,0 +1,32 @@
+ /////lastmodified
+       $sqlSTI= "UPDATE `uccp_studentinfo` AS ue
+        INNER JOIN `uccp_masterlist` AS um ON ue.`name` = um.`name`
+        SET ue.`remarks` = 'Irregular'
+        WHERE um.`remarks` = 'Irregular'";
+        $resultSt= mysqli_query($conn,$sqlSTI);
+        
+        
+        $sqlSTIs= "UPDATE `uccp_studentinfo` AS ue
+        INNER JOIN `uccp_masterlist` AS um ON ue.`name` = um.`name`
+        SET ue.`remarks` = 'Passed'
+        WHERE um.`remarks` = 'Passed'";
+        $resultSts= mysqli_query($conn,$sqlSTIs);
+
+
+
+
+/mag add ka column sa irregular table
+	update uccp_irregular 
+	innerjoin sa masterlist
+	set uccp_irregular is_passed = 1 where masterlsit name and irregular name are equal
+	where masterlist remarks = passed
+/////////////////////////
+
+
+
+ibahin mo narin ung sa generate erf dadagdagan mo lang namn ung 
+column ng is_passed tas seselect nya pag 0 value pag 1 hindi na ,
+pati table seselect nya lang lahat ng may value na is_passed na 0 the rest di na 
+
+sa schedule posible din mabago ganon din dadagdag 
+

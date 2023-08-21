@@ -1,0 +1,103 @@
+package com.example.uccps;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Schedule_prof extends AppCompatActivity {
+    private static final String TAG = Schedule_prof.class.getSimpleName();
+    private TextView textViewSchedule;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_schedule_prof);
+
+        textViewSchedule = findViewById(R.id.textViewSchedule);
+
+        String fullname = getIntent().getStringExtra("fullname");
+        textViewSchedule.setText(fullname);
+
+        String url = "http://192.168.1.11/UCCP/profsched.php?fullname=" + fullname;
+
+        RequestQueue requestQueue = Volley.newRequestQueue(Schedule_prof.this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            List<Schedule> schedules = new ArrayList<>();
+
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject scheduleObject = response.getJSONObject(i);
+
+                                String courseYearSection = scheduleObject.optString("courseyearsection");
+                                String subjectCode = scheduleObject.optString("subjectcode");
+                                String subjectName = scheduleObject.optString("subjectname");
+                                String units = scheduleObject.optString("units");
+                                String day = scheduleObject.optString("day");
+                                String startTime = scheduleObject.optString("starttime");
+                                String endTime = scheduleObject.optString("endtime");
+                                String room = scheduleObject.optString("room");
+                                String professor = scheduleObject.optString("professor");
+
+                                if (fullname.equals(scheduleObject.optString("professor"))) {
+
+                                    Schedule schedule = new Schedule(courseYearSection, subjectCode, subjectName, units, day, startTime, endTime, room, professor);
+                                    schedules.add(schedule);
+                                }
+                            }
+
+                            displaySchedules(schedules);
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parsing JSON response: " + e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Schedule_prof.this, "Error retrieving schedule data", Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                    }
+                });
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void displaySchedules(List<Schedule> schedules) {
+        StringBuilder scheduleBuilder = new StringBuilder();
+
+        for (Schedule schedule : schedules) {
+            scheduleBuilder.append("Course/Year/Section: ").append(schedule.getCourseYearSection()).append("\n");
+            scheduleBuilder.append("Subject Code: ").append(schedule.getSubjectCode()).append("\n");
+            scheduleBuilder.append("Subject Name: ").append(schedule.getSubjectName()).append("\n");
+            scheduleBuilder.append("Units: ").append(schedule.getUnits()).append("\n");
+            scheduleBuilder.append("Day: ").append(schedule.getDay()).append("\n");
+            scheduleBuilder.append("Start Time: ").append(schedule.getStartTime()).append("\n");
+            scheduleBuilder.append("End Time: ").append(schedule.getEndTime()).append("\n");
+            scheduleBuilder.append("Room: ").append(schedule.getRoom()).append("\n");
+            scheduleBuilder.append("\n");
+        }
+
+        textViewSchedule.setText(scheduleBuilder.toString());
+    }
+}
+
+"http://192.168.1.11/UCCP//profsched.php"

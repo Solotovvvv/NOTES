@@ -1,0 +1,48 @@
+function printErf() {
+  var printContents = document.getElementById('erf-content').innerHTML;
+  var originalContents = document.body.innerHTML;
+
+  var printWindow = window.open('', '_blank', 'width=800,height=600');
+
+  printWindow.document.write('<html><head><title>RESULTS</title>');
+  printWindow.document.write('<style>');
+  printWindow.document.write('.print-container { display: flex; align-items: center; justify-content: center; gap: 20px; }');
+  printWindow.document.write('.print-element img { display: block; width: 80px; height: 80px;}'); // Remove extra space below images
+  printWindow.document.write('.print-content { text-align: center; }');
+  printWindow.document.write('.print-content h1, .print-content p { margin: 0; line-height: 1; white-space: nowrap; }');
+  printWindow.document.write('.card { margin-bottom: 20px; margin-top:30px; }'); // Add margin to the card
+  printWindow.document.write('.table { width: 100%; border-collapse: collapse; }');
+  printWindow.document.write('.table th, .table td { border: 1px solid #000; padding: 8px; }');
+  printWindow.document.write('.table th { background-color: #f2f2f2; }');
+  printWindow.document.write('.table td { page-break-inside: auto; }'); // Allow the td to break individually
+  printWindow.document.write('</style></head><body>');
+  printWindow.document.write(printContents); // Assign printContents directly to the new window's body
+  printWindow.document.write('</body></html>'); // Close the HTML body and HTML
+
+  printWindow.document.close();
+
+  printWindow.onload = function() {
+    printWindow.print();
+    printWindow.close();
+  };
+
+  document.body.innerHTML = originalContents;
+}
+
+
+
+$output .= '<div class="print-container">
+  <div class="print-element">
+    <img src="image/logo.png" alt="University of Caloocan City Logo" class="img-fluid" width="100" height="100">
+  </div>
+  <div class="print-element print-content">
+    <h1>UNIVERSITY OF CALOOCAN CITY</h1>
+    <p>Biglang Awa St., Grace Park East, Caloocan City</p>
+    <p>COLLEGE OF LIBERAL ARTS</p>
+  </div>
+  <div class="print-element">
+    <img src="image/CLAS.png" alt="University of Caloocan City Logo" class="img-fluid" width="100" height="100">
+  </div>
+</div>
+
+';

@@ -1,0 +1,495 @@
+<?php
+include 'includes/config.php';
+
+$sql = "SELECT * FROM `dept` WHERE status ='Enable'";
+$result = mysqli_query($conn, $sql);
+
+
+
+$querysectionq = "SELECT * FROM section ORDER BY sec_id";
+$result1 = mysqli_query($conn, $querysectionq);
+
+?>
+
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A stepper plugin for Bootstrap 4.">
+    <link rel="icon" href="dist/img/ucc-logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/css/bs-stepper.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/general/style.css">
+    <title>UNIVERSITY OF CALOOCAN CITY</title>
+    <style>
+        .form-check-label {
+            margin-right: 50px;
+        }
+
+        @media (max-width: 1200px) {
+            .form-check-label {
+                margin-right: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-check-label {
+                margin-right: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <img src="dist/img/ucc-logo.png" alt="University of Caloocan City Logo" width="87" height="100"
+                class="ucc-logo">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link h5 pt-3 font-weight-normal" href="#">University of Caloocan City</a>
+                    </li>
+                </ul>
+                <label for="" class="text-white pt-2">Evaluation System (ES)</label>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card p-3 bg-light">
+            <div class="card">
+                <div class="p-4 bg-white shadow-sm">
+                    <div id="stepper1" class="bs-stepper">
+                        <div class="bs-stepper-header" role="tablist">
+                            <div class="step" data-target="#test-l-1">
+                                <button type="button" class="step-trigger" role="tab" id="stepper1trigger1"
+                                    aria-controls="test-l-1">
+                                    <span class="bs-stepper-circle">1</span>
+                                    <span class="bs-stepper-label">Student</span>
+                                </button>
+                            </div>
+                            <div class="bs-stepper-line"></div>
+                            <div class="step" data-target="#test-l-2">
+                                <button type="button" class="step-trigger" role="tab" id="stepper1trigger2"
+                                    aria-controls="test-l-2">
+                                    <span class="bs-stepper-circle">2</span>
+                                    <span class="bs-stepper-label">Faculty</span>
+                                </button>
+                            </div>
+                            <div class="bs-stepper-line"></div>
+                            <div class="step" data-target="#test-l-3">
+                                <button type="button" class="step-trigger" role="tab" id="stepper1trigger3"
+                                    aria-controls="test-l-3">
+                                    <span class="bs-stepper-circle">3</span>
+                                    <span class="bs-stepper-label">Evaluation</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bs-stepper-content">
+                            <form id="stepperForm" onsubmit="return validateForm()">
+                                <div id="test-l-1" role="tabpanel" class="bs-stepper-pane"
+                                    aria-labelledby="stepper1trigger1">
+                                    <div class="form-group" >
+                                        <label class="font-weight-bold">Campus <span
+                                                class="text-danger">*</span></label>
+                                        <select name="" id="Campus" class="form-control">
+                                            <option value="" selected>Select Campus</option>
+                                            <option value="South">South</option>
+                                            <option value="North">North</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="studno" class="font-weight-bold mt-3">Student No. <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="std_no"
+                                            placeholder="Ex. 20200000-M">
+                                    </div>
+                                    <button class="btn btn-primary stepper-next-btn" type="button">Next</button>
+                                </div>
+                                <div id="test-l-2" role="tabpanel" class="bs-stepper-pane"
+                                    aria-labelledby="stepper1trigger2">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">Department <span
+                                                class="text-danger">*</span></label>
+                                        <select name="" id="department" class="form-control">
+                                            <option value="" selected>Select Department</option>
+                                            <?php
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo '<option value="' . $row['dept_id'] . '">' . $row['dept_name'] . '</option>';
+                                            }
+                                            ?>
+
+                                        </select>
+                                        <label class="font-weight-bold mt-3">Professor <span
+                                                class="text-danger">*</span></label>
+                                        <select name="" id="prof" class="form-control">
+                                            <option value="" selected>Select Professor</option>
+
+
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-secondary stepper-prev-btn" type="button">Previous</button>
+                                    <button class="btn btn-primary stepper-next-btn" type="button">Next</button>
+                                </div>
+
+
+                                <div id="test-l-3" role="tabpanel" class="bs-stepper-pane"
+                                    aria-labelledby="stepper1trigger3">
+                                    <div class="form-group">
+                                        <div class="container">
+                                            <?php while ($row = mysqli_fetch_assoc($result1)) {
+                                                $section = $row['sec_name'];
+                                                $section_desc = $row['sec_desc'];
+                                                $questions_query = "SELECT * FROM question WHERE q_sec = '$section'";
+                                                $questions_result = $result2 = mysqli_query($conn, $questions_query);
+
+                                                $sectionQQuery = "SELECT sec_name
+                                                FROM section
+                                                WHERE sec_name = '$section'
+                                                  AND sec_name IN (
+                                                    SELECT q_sec
+                                                    FROM question
+                                                    WHERE q_sec = '$section'
+                                                      AND type = 1
+                                                  )";
+                                                $sectionQQueryResult = mysqli_query($conn, $sectionQQuery);
+                                                ?>
+                                                <div class="form-group">
+                                                    <?php while ($datas = mysqli_fetch_assoc($sectionQQueryResult)) {
+                                                        if (mysqli_num_rows($sectionQQueryResult) != 0) { ?>
+                                                            <div class="card p-3 border border-success">
+                                                                <label><span class="font-weight-bold">Section
+                                                                        <?php echo $section ?>:
+                                                                    </span>
+                                                                    <?php echo $section_desc ?>
+                                                                </label>
+                                                                <p class="ml-3 mb-0">SCALE <br> 5 = OUTSTANDING <br> 4 =
+                                                                    ABOVE
+                                                                    AVERAGE <br> 3 = BELOW AVERAGE <br> 2 = FAIR <br> 1 =
+                                                                    POOR
+                                                                </p>
+                                                            </div>
+                                                        <?php }
+                                                    } ?>
+                                                </div>
+
+                                                <?php while ($row2 = mysqli_fetch_assoc($questions_result)) {
+                                                    if ($row2['type'] == 1) {
+                                                        ?>
+                                                        <div class="form-group">
+
+                                                            <div class="card p-3">
+                                                                <p>
+                                                                    <?php echo $row2['q_desc'] ?><span class="text-danger">*</span>
+                                                                </p>
+
+                                                                <div class="form-group row mb-0">
+                                                                    <div class="col-sm-12 d-flex justify-content-center">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input radioButtons"
+                                                                                type="radio" id="<?php echo $row2['q_sec'] ?>"
+                                                                                name="<?php echo $row2['q_num'] ?>" value="1"
+                                                                                required>
+                                                                            <label class="form-check-label">1</label>
+                                                                        </div>
+
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input radioButtons"
+                                                                                type="radio" id="<?php echo $row2['q_sec'] ?>"
+                                                                                name="<?php echo $row2['q_num'] ?>" value="2"
+                                                                                required>
+                                                                            <label class="form-check-label">2</label>
+                                                                        </div>
+
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input radioButtons"
+                                                                                type="radio" id="<?php echo $row2['q_sec'] ?>"
+                                                                                name="<?php echo $row2['q_num'] ?>" value="3"
+                                                                                required>
+                                                                            <label class="form-check-label">3</label>
+                                                                        </div>
+
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input radioButtons"
+                                                                                type="radio" id="<?php echo $row2['q_sec'] ?>"
+                                                                                name="<?php echo $row2['q_num'] ?>" value="4"
+                                                                                required>
+                                                                            <label class="form-check-label">4</label>
+                                                                        </div>
+
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input radioButtons"
+                                                                                type="radio" id="<?php echo $row2['q_sec'] ?>"
+                                                                                name="<?php echo $row2['q_num'] ?>" value="5"
+                                                                                required>
+                                                                            <label class="form-check-label">5</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <?php } elseif ($row2['type'] == 2) { ?>
+                                                        <div class="form-group">
+                                                            <div class="card p-3 border border-success">
+                                                                <label><span class="font-weight-bold">Section
+                                                                        <?php echo $section ?>:
+                                                                    </span>
+                                                                    <?php echo $section_desc ?>
+                                                                </label>
+                                                                <p class="ml-3 mb-0">Description (Optional) </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="card p-3">
+                                                                <label class="text-justify">
+                                                                    <?php echo $row2['q_desc'] ?>
+                                                                </label>
+                                                                <textarea class="form-control" rows="5"
+                                                                    id="<?php echo $row2['q_sec'] ?>"
+                                                                    name="<?php echo $row2['q_num'] ?>"
+                                                                    placeholder="Long Answer Text"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                            <?php } ?>
+
+                                            <?php } ?>
+
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-secondary stepper-prev-btn" type="button">Previous</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div><!-- test 1-3 -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/js/bs-stepper.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            var stepper1 = new Stepper(document.querySelector('#stepper1'), {
+                linear: true,
+                animation: true
+            });
+
+            $('.btn-primary').on('click', function () {
+                var stdNoValue = $('#std_no').val();
+             
+                // var department = $('#department').val('');
+                // $('#prof').prop('selectedIndex', 0);
+     
+                // Perform additional actions with stdNoValue
+                // var campus = $('#Campus').val();
+                // alert(campus);
+                stepper1.next();
+            });
+
+            $('.btn-secondary').on('click', function () {
+                stepper1.previous();
+            });
+
+            $('#Campus').change(function(){
+
+                   var department = $('#department').val('');
+
+                $('#prof').prop('selectedIndex', 0).val('');
+     
+
+            });
+
+            $('#std_no').on('keyup', function () {
+                var department = $('#department').val('');
+                $('#prof').prop('selectedIndex', 0).val('');
+
+             });
+
+
+
+            $('#department').change(function () {
+                var departmentId = $(this).val();
+                var stud_nos = $('#std_no').val(); // Retrieve std_no value here
+                var campus = $('#Campus').val(); // Retrieve std_no value here
+                // alert(departmentId);
+
+                
+
+             
+                fetchProfessors(departmentId, stud_nos, campus); // Pass stud_nos as an argument
+            });
+
+            function fetchProfessors(departmentId, stud_nos, campus) {
+                $.ajax({
+                    url: 'fetchProfessors.php',
+                    method: 'POST',
+                    data: { departmentId: departmentId, stud_nos: stud_nos, campus:campus },
+                    success: function (response) {
+                        var professors = JSON.parse(response);
+                        populateProfessors(professors);
+                    },
+                    error: function () {
+                        console.log('Error occurred while fetching professors.');
+                    }
+                });
+            }
+            function populateProfessors(professors) {
+                var professorSelect = $('#prof');
+                professorSelect.empty(); // Clear previous options
+
+                if (professors.length === 0) {
+                    // var option = $('<option>').text('No available prof');
+                    var option = $('<option>').text('No available prof').val('');
+
+                    professorSelect.append(option);
+                } else {
+                    var defaultOption = $('<option>').text('Select Professor').val('');
+                    professorSelect.append(defaultOption);
+
+                    $.each(professors, function (index, professor) {
+                        var option = $('<option>').val(professor.prof_id).text(professor.prof_name);
+                        professorSelect.append(option);
+                    });
+
+                    var selectedProfId = $('#selectedProf').val();
+                    professorSelect.val(selectedProfId);
+                }
+
+                professorSelect.find('option:first').prop('selected', true);
+            }
+
+
+
+            //testing ko para ma chech if tamang id ng prof ginagamit disregard mo to 
+            $('#prof').change(function () {
+                var selectedProf = $(this).val();
+                // alert('Selected Professor: ' + selectedProf);
+            });
+        });
+
+        function validateForm() {
+            var stdNoValue = $('#std_no').val();
+            var departmentValue = $('#department').val();
+            var profValue = $('#prof').val();
+
+            // Check if any input fields are empty
+            if (stdNoValue.trim() === '' || departmentValue === '' || profValue === '') {
+                swal.fire('Error', 'Please fill in all required fields.', 'error');
+                return false; // Prevent form submission
+            }
+
+            // Check if at least one radio button is selected for each question
+            var questions = $('.card p-3');
+            for (var i = 0; i < questions.length; i++) {
+                var radioButtons = $(questions[i]).find('.radioButtons');
+                var isRadioButtonSelected = false;
+
+                for (var j = 0; j < radioButtons.length; j++) {
+                    if ($(radioButtons[j]).is(':checked')) {
+                        isRadioButtonSelected = true;
+                        break;
+                    }
+                }
+
+                if (!isRadioButtonSelected) {
+                    swal.fire('Error', 'Please select an option for each question.', 'error');
+                    return false; // Prevent form submission
+                }
+            }
+
+            // Call addEval() function to process form data
+            addEval();
+
+            // Prevent default form submission
+            return false;
+        };
+
+
+
+
+
+        function addEval() {
+            // var campus = $('#campus').val();
+            var std_no = $('#std_no').val();
+            var department = $('#department').val();
+            var prof = $('#prof').val();
+                alert(std_no);
+
+            let allChecked = [];
+
+            $(".radioButtons:checked").each(function () {
+                allChecked.push({
+                    question_num: this.name,
+                    section_num: this.id,
+                    value: this.value
+                });
+            });
+
+            // Retrieve the values of all text areas dynamically
+            $("textarea").each(function () {
+                var textAreaValue = $(this).val();
+                var questionNum = $(this).attr("name"); // Get the question number dynamically
+                var sectionNum = $(this).closest(".card").find("label span").text().trim(); // Get the section number dynamically
+                allChecked.push({
+                    question_num: questionNum,
+                    section_num: sectionNum,
+                    value: textAreaValue
+                });
+            });
+
+            console.log(allChecked);
+
+            $.ajax({
+                url: "AddEval.php",
+                method: "POST",
+                data: {
+                    std_no: std_no,
+                    department: department,
+                    prof: prof,
+                    allChecked: JSON.stringify(allChecked)
+                },
+                success: function (data) {
+                    var data = JSON.parse(data);
+                    swal.fire(data.title, data.message, data.icon);
+                    window.location.reload();
+                }
+            });
+
+
+        };
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</body>
+
+</html>

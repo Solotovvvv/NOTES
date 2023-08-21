@@ -1,0 +1,74 @@
+[
+                {
+                  "anonymous": false,
+                  "inputs": [
+                    {
+                      "indexed": true,
+                      "name": "hash",
+                      "type": "bytes32"
+                    },
+                    {
+                      "indexed": false,
+                      "name": "companyName",
+                      "type": "string"
+                    },
+                    {
+                      "indexed": false,
+                      "name": "duration",
+                      "type": "uint256"
+                    },
+                    {
+                      "indexed": false,
+                      "name": "timestamp",
+                      "type": "uint256"
+                    }
+                  ],
+                  "name": "ContractRegistered",
+                  "type": "event"
+                },
+                {
+                  "constant": false,
+                  "inputs": [
+                    {
+                      "name": "companyName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "duration",
+                      "type": "uint256"
+                    }
+                  ],
+                  "name": "registerContract",
+                  "outputs": [],
+                  "payable": false,
+                  "stateMutability": "nonpayable",
+                  "type": "function"
+                },
+                {
+                  "constant": true,
+                  "inputs": [
+                    {
+                      "name": "hash",
+                      "type": "bytes32"
+                    }
+                  ],
+                  "name": "getContractInfo",
+                  "outputs": [
+                    {
+                      "name": "",
+                      "type": "string"
+                    },
+                    {
+                      "name": "",
+                      "type": "uint256"
+                    },
+                    {
+                      "name": "",
+                      "type": "uint256"
+                    }
+                  ],
+                  "payable": false,
+                  "stateMutability": "view",
+                  "type": "function"
+                }
+              ];

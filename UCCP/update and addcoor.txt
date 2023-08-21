@@ -1,0 +1,77 @@
+if(isset($_POST['login'])){
+    $Username = input_filter($_POST['Username']);
+    $Password = input_filter($_POST['Password']);
+
+    $Username =  mysqli_real_escape_string($conn,$Username);
+    $Password =  mysqli_real_escape_string($conn,$Password);
+
+    $query = "SELECT * FROM user WHERE `username` = ? AND `password` ";
+    if ($stmt = mysqli_prepare($conn, $query)) {
+        mysqli_stmt_bind_param($stmt, "ss", $Username , $Password);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $id, $username, $email, $password, $role, $x);
+    
+        if (mysqli_stmt_fetch($stmt)) {
+            if (password_verify($Password, $password)) {
+                session_start();
+                $_SESSION['Username'] = $Username;
+                if ($role == 'Admin') {
+                    header('Location: admin/AddCoor.php');
+                } else if ($role == 'Coordinator') {
+                    header('Location: coor/student.php');
+                }
+                exit();
+            } else {
+                echo "<script> alert('Invalid Password'); </script>";
+            }
+        } else {
+            echo "<script> alert('Invalid Username'); </script>";
+        }
+    
+        mysqli_stmt_close($stmt);
+    } else {
+        echo "not Prepared";
+    }
+}
+
+?>
+
+
+////////////////orig
+
+
+
+if(isset($_POST['hiddendata'])){
+  $hiddendata = $_POST['hiddendata'];
+  $username = $_POST['username'];
+  $email =$_POST['email'];
+  $password = $_POST['password'];
+
+  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+  $sql3 = "UPDATE user SET username = '$username', email= '$email', password = '$hashed_password' WHERE id = '$hiddendata' ";
+  $results3 = mysqli_query($conn, $sql3);
+
+  
+  $sql4 = "UPDATE registrar_course SET username = '$username', password = '$hashed_password' WHERE id = '$hiddendata' ";
+  $results4 = mysqli_query($conn, $sql4);
+
+
+
+
+
+
+
+  if($results3){
+    $data = array(
+      'status'=>'success',
+    );
+    echo json_encode($data);
+  } else {
+    $data = array(
+      'status'=>'failed',
+    );
+    echo json_encode($data);
+    echo mysqli_error($conn); // Debugging statement to print MySQL error
+  }
+}

@@ -1,0 +1,162 @@
+<?php
+include 'includes/config.php';
+require('fpdf186/fpdf.php');
+
+header('Content-Type: application/pdf');
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+class PDF extends FPDF
+{
+
+  
+  function Header()
+    {
+        $this->Image('image/logo.png', 160, 8, 20);
+        $this->Image('image/logo.png', 30, 8, 20);
+        $this->SetFont('Arial', 'B', 15);
+        $this->Cell(80);
+        $this->Cell(30, 10, 'UNIVERSITY OF CALOOCAN CITY', 0, 0, 'C');
+        $this->SetFont('Arial', 'I', 12);
+        $this->Cell(-30, 20, 'Biglang Awa St., Grace Park East, Caloocan City', 0, 0, 'C');
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(30, 30, 'COLLEGE OF LIBERAL ARTS', 0, 0, 'C');
+        $this->Ln(30);
+    }
+
+    function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('Arial', 'I', 8);
+        $this->Cell(0, 10, 'Page ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+    }
+
+    function getNumLines($text, $width, $fontSize)
+    {
+        $this->SetFont('Arial', '', $fontSize);
+
+        $words = explode(' ', $text);
+        $lines = 0;
+        $currentWidth = 0;
+
+        foreach ($words as $word) {
+            $wordWidth = $this->GetStringWidth($word);
+            $currentWidth += $wordWidth;
+
+            if ($currentWidth > $width) {
+                $lines++;
+                $currentWidth = $wordWidth;
+            } else {
+                $currentWidth += $this->GetStringWidth(' '); // Add space width between words
+            }
+        }
+
+        return $lines + 1; // Add one to include the last line
+    }
+
+    // Function to generate the table dynamically using the provided data
+    function GenerateDynamicTable($conn, $selectedProfessorId)
+    {
+        // Fetch questions and their means from the database for the selected professor
+        $sql = "SELECT q_desc, q_sec, q_num, AVG(response.ans) AS mean
+                FROM question
+                LEFT JOIN response ON question.q_num = response.quest_id
+                WHERE type = 1
+                AND response.prof_id = $selectedProfessorId
+                GROUP BY question.q_num
+                ORDER BY question.q_sec ASC, question.q_num ASC";
+
+        $result = mysqli_query($conn, $sql);
+
+
+
+        // Check if the query was successful before proceeding
+        if (!$result) {
+            die('Error: ' . mysqli_error($conn));
+
+      
+    }
+    $this->Cell(100, 10, 'Section - Question', 1, 0, 'C');
+    $this->Cell(20, 10, 'Mean', 1, 0, 'C');
+    $this->Cell(30, 10, 'Remarks', 1, 0, 'C');
+    $this->Ln();
+    
+    // Loop through the result set and output the data
+    while ($row = mysqli_fetch_array($result)) {
+        $question = $row['q_desc'];
+        $section = $row['q_sec'];
+        $mean = number_format($row['mean'], 2);
+    
+        // Output data in cells
+        $this->MultiCell(100, 7, $section . ' - ' . $question, '', 'C', false); // true for line wrap
+        $this->SetXY($this->GetX() + 100, $this->GetY() - 7); // Move to the next cell position
+        $this->Cell(20, 7, $mean, '', 0, 'C'); // Cell for $mean
+        $this->Cell(30, 7, '', '', 0, 'C'); // For now, let's leave the "REMARKS" column empty
+    
+        $this->Ln();
+    }
+    }
+}
+
+
+// Check if the professorId parameter is set in the POST request
+if (isset($_POST['professorId'])) {
+    $selectedProfessorId = $_POST['professorId'];
+
+    // Create PDF instance
+    $pdf = new PDF();
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', '', 11);
+
+    // Generate the dynamic table with the fetched data
+    $pdf->GenerateDynamicTable($conn, $selectedProfessorId);
+    ob_clean();
+    header('Content-Type: application/pdf'); 
+    // Output the PDF content
+    $pdf->Output();
+} else {
+    // Handle the case where the required parameter is not provided in the POST request
+    echo "Error: Professor ID is required.";
+}
+
+// Close the database connection
+mysqli_close($conn);
+?>
+
+
+
+
+js
+ var printButton = $('<button>', {
+        text: 'Print',
+        class: 'custom-print-button',
+        click: function () {
+            var selectedProfessorId = $('#PROF').val();
+            var selectedDepartmentId = $('#DEPT').val();
+
+            // Use AJAX to send the selected professor and department values to generate.php
+            $.ajax({
+    type: "POST",
+    url: "generate.php",
+    data: { professorId: selectedProfessorId },
+    xhrFields: {
+        responseType: 'arraybuffer' // Set the response type to arraybuffer for binary data
+    },
+    success: function (response) {
+        // Convert the binary data to a Blob object
+        var blob = new Blob([response], { type: 'application/pdf' });
+
+        // Create a temporary link with the PDF content and open it in a new window
+        var blobUrl = URL.createObjectURL(blob);
+        var printWin = window.open(blobUrl, '_blank');
+        printWin.focus();
+    },
+    error: function () {
+        alert('An error occurred while generating the PDF.');
+    }
+            });
+        }
+    });
