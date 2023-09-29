@@ -14,3 +14,12 @@ Connect to the Metamask
 https://github.com/MetaMask/legacy-web3
 npm install @metamask/legacy-web3
 
+
+Procedure
+
+if in another nodes/file/pc double check the contract address -if you are using local
+install truffle -npm install -g truffle-  if the new folder or project dont have truffle yet
+add truffle.js directory in ganache if new file 
+then truffle migrate and get the new contract address of smart contract
+then update the contract address to your js setup 
+
