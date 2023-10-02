@@ -1,0 +1,117 @@
+------------------1-------------------
+num = int(input("Enter a Number: "))
+
+
+
+def palindrome (n):
+
+    c_str = str(n)
+
+    reverseds = c_str[::-1];
+
+    if c_str == reverseds:
+        return True
+    else:
+        return False
+
+
+
+
+if palindrome(num):
+    print(num,"Is a Palindrome")
+else:
+    print(num,"Is a not Palindrome")
+        
+
+---------------2-------------------
+def prime(num):
+
+    if num == 1:
+        return False
+    elif num > 1:
+
+        for i in range(2, num):
+            if num % i == 0:
+                return False
+            else:
+                return True
+
+
+
+if prime(num):
+    print(num, "Is a Prime")
+else:
+    print(num, "Is not a Prime")
+
+
+
+
+-------3------------
+def add (num):
+
+    strx = str(num)
+    sums = 0
+
+    for i in strx:
+        sums += int(i)
+
+    return sums
+
+result = add(num)
+
+print(result)
+
+
+----------4-------------
+def perfect(num):
+
+    divisor = []
+
+    for i in range (1,num):
+        if num % i == 0:
+            divisor.append(i)
+
+    if sum(divisor) == num:
+            return True
+    else:
+            return False
+
+
+if perfect(num):
+    print(num, "is Perfect Number")
+else:
+    print(num, "is not a Perfect Number")
+
+
+-------------5------------
+
+
+num1 = int(input("Enter a Number: "))
+num2 = int(input("Enter a Number: "))
+
+
+
+
+def friendly_pair (num):
+    divisor = []
+
+
+    for i in range (1,num):
+        if num % i == 0:
+            divisor.append(i)
+
+    return sum(divisor)
+
+
+
+
+sum_of_n = friendly_pair(num1)
+sum_of_m = friendly_pair(num2)
+
+
+if sum_of_n/num1 == sum_of_m/num2:
+    print(num1, "and", num2, "are friendly pairs.")
+else:
+    print(num1, "and", num2, "are friendly pairs.")
+      
+
